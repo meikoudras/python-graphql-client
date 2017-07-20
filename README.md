@@ -13,7 +13,7 @@ pip install graphqlclient
 ```py
 from graphqlclient import GraphQLClient
 
-client = GraphQLClient('http://graphql-swapi.parseapp.com/')
+client = GraphQLClient('http://graphql-swapi.parseapp.com/', key=<key>)
 
 result = client.execute('''
 {

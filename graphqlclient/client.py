@@ -1,32 +1,26 @@
-import urllib
 import json
+import requests
+
 
 class GraphQLClient:
-    def __init__(self, endpoint):
+    def __init__(self, endpoint, key):
         self.endpoint = endpoint
-        self.token = None
+        self.key = key
 
     def execute(self, query, variables=None):
         return self._send(query, variables)
 
-    def inject_token(self, token):
-        self.token = token
-
     def _send(self, query, variables):
-        data = {'query': query,
-                'variables': variables}
-        headers = {'Accept': 'application/json',
-                   'Content-Type': 'application/json'}
+        data = {
+            'query': query,
+            'variables': variables
+        }
 
-        if self.token is not None:
-            headers['Authorization'] = 'Bearer %s' % self.token
+        headers = {
+            'Content-Type': 'application/json',
+            'X-Application-Key': self.key,
+        }
 
-        req = urllib.request.Request(self.endpoint, json.dumps(data), headers)
+        req = requests.post(self.endpoint, data=json.dumps(data), headers=headers)
 
-        try:
-            response = urllib.request.urlopen(req)
-            return response.read()
-        except (urllib.request.HTTPError, e):
-            print(e.read())
-            print('')
-            raise e
+        return req
