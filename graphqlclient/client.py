@@ -11,6 +11,13 @@ class GraphQLClient:
         return self._send(query, variables)
 
     def _send(self, query, variables):
+
+        # Encode the variables if needed
+        try:
+            variables.decode()
+        except AttributeError:
+            variables = json.dumps(variables)
+
         data = {
             'query': query,
             'variables': variables
@@ -21,6 +28,6 @@ class GraphQLClient:
             'X-Application-Key': self.key,
         }
 
-        req = requests.post(self.endpoint, data=json.dumps(data), headers=headers)
+        res = requests.post(self.endpoint, json=data, headers=headers)
 
-        return req
+        return res.json()
