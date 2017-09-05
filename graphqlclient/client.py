@@ -26,7 +26,7 @@ class GraphQLClient:
         headers = {
             'Content-Type': 'application/json',
             'X-Application-Key': self.key,
-            'authorization': "Bearer {}".format(key),
+            'authorization': "Bearer {}".format(self.key),
         }
 
         res = requests.post(self.endpoint, json=data, headers=headers)
